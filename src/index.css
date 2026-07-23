@@ -1,0 +1,139 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "vazir";
+    src: url("../src/assets/fonts/Vazirmatn-FD-NL-Regular.woff2")
+      format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "vazir";
+    src: url("../src/assets/fonts/Vazirmatn-FD-NL-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "vazir";
+    src: url("../src/assets/fonts/Vazirmatn-FD-NL-SemiBold.woff2")
+      format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "vazir";
+    src: url("../src/assets/fonts/Vazirmatn-FD-NL-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "b_nazanin";
+    src: url("../src/assets/fonts/B-Nazanin.woff") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  :root {
+    /* Tokens */
+
+    --color-danger: #dc3545;
+    --color-success: #28a745;
+    --color-accent: #0d6efd;
+    --color-text: #dee3e4;
+    --color-muted: #888a8a;
+
+    --color-soft: #f8f9fa;
+    --color-smooth: #282b2f;
+
+
+
+
+
+  
+
+    /* Border */
+    --border: var(--gray-10);
+
+    * {
+      transition: all 200ms ease-in-out;
+    }
+    .swiper-pagination-bullet-active {
+      background: var(--brand-primary) !important;
+    }
+    .scroll-anim {
+      opacity: 0;
+      transform: var(--from);
+      transition: all 0.7s ease;
+    }
+
+    .scroll-anim.show {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+  }
+  html {
+    direction: rtl;
+    overflow-x: hidden !important;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: "Vazir", sans-serif;
+    color: var(--color-text);
+    font-size: 14px;
+    overflow-x: hidden !important;
+    line-height: 30px;
+  }
+  #root {
+    /* width: 1400px; */
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  p,
+  li {
+    text-align: justify;
+  }
+  h1 {
+    @apply text-2xl md:text-5xl lg:text-[3rem] leading-[1.7] font-bold;
+  }
+
+  h2 {
+    @apply text-xl md:text-4xl lg:text-[2.25rem] leading-[1.7] font-bold;
+  }
+
+  h3 {
+    @apply text-xl md:text-3xl lg:text-[1.75rem] leading-[1.4] font-semibold;
+  }
+
+  h4 {
+    @apply text-lg md:text-2xl lg:text-[1.3rem] leading-[1.4] font-semibold;
+  }
+
+  h5 {
+    @apply text-base md:text-lg lg:text-[1.25rem] leading-[1.7] font-medium;
+  }
+
+  h6 {
+    @apply text-sm md:text-base lg:text-[1rem] leading-[1.5] font-medium;
+  }
+}
+@layer components {
+  .app-container {
+    @apply mx-auto px-4 sm:px-6 lg:px-12;
+    /* max-width: 1400px; */
+    max-width: 85rem;
+  }
+}
