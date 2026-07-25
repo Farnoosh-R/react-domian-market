@@ -4,13 +4,28 @@ import { FaHandshake } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 
+const generateCaptcha = () => {
+  const first = Math.floor(Math.random() * 10) + 1;
+  const second = Math.floor(Math.random() * 10) + 1;
+
+  return {
+    first,
+    second,
+    answer: first + second,
+  };
+};
+
 const Partnership = () => {
+  const [captcha, setCaptcha] = useState(generateCaptcha());
+  const [captchaValue, setCaptchaValue] = useState("");
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
-    domian: "",
+    domain: "",
     price: "",
+    des: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,25 +42,32 @@ const Partnership = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess(false);
+    if (Number(captchaValue) !== captcha.answer) {
+      alert("پاسخ سوال امنیتی اشتباه است.");
+
+      setCaptcha(generateCaptcha());
+      setCaptchaValue("");
+
+      return;
+    }
     setLoading(true);
 
     try {
-      const res = await fetch(
-        "http://test.ir/api/wp-json/custom/v1/test",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullName: form.name,
-            mobile: form.phone,
-            email: form.email,
-            domian: form.domian,
-            price: form.price,
-          }),
+      const res = await fetch("http://test.ir/api/wp-json/custom/v1/test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          fullName: form.name,
+          mobile: form.phone,
+          email: form.email,
+          domain: form.domain,
+          price: form.price,
+          des: form.des,
+        }),
+      });
 
       const data = await res.json();
 
@@ -55,9 +77,12 @@ const Partnership = () => {
           name: "",
           phone: "",
           email: "",
-          domian: "",
+          domain: "",
           price: "",
+          des: "",
         });
+        setCaptcha(generateCaptcha());
+        setCaptchaValue("");
       }
     } catch (err) {
       console.log(err);
@@ -87,13 +112,18 @@ const Partnership = () => {
           </div>
           <div className="flex flex-col gap-2 lg:w-[70%] mt-10 lg:mt-0">
             <div className="flex items-center justify-end w-full ">
-              <Link to={"/"} className="flex items-center gap-1 hover:text-[var(--color-text)]/70">
+              <Link
+                to={"/"}
+                className="flex items-center gap-1 hover:text-[var(--color-text)]/70"
+              >
                 <div>بازگشت به صفحه ثبت پیشنهاد</div>
                 <FaLongArrowAltLeft size={15} />
               </Link>
-              
             </div>
-            <div className=" bg-[var(--color-soft)] rounded-xl p-7 scroll-anim" style={{ "--from": "translateY(40px)" }}>
+            <div
+              className=" bg-[var(--color-soft)] rounded-xl p-7 scroll-anim"
+              style={{ "--from": "translateY(40px)" }}
+            >
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد فروش</h2>
                 <div className="text-[var(--color-muted)] text-lg">
@@ -109,7 +139,7 @@ const Partnership = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="نام و نام خانوادگی خود را وارد نمایید"
-                      className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
                   </div>
 
@@ -119,9 +149,9 @@ const Partnership = () => {
                       name="phone"
                       value={form.phone}
                       onChange={handleChange}
-                      type="text"
+                      type="number"
                       placeholder="شماره تماس خود را وارد نمایید"
-                      className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
                   </div>
                 </div>
@@ -135,7 +165,7 @@ const Partnership = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="ایمیل خود را وارد نماید"
-                      className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
                   </div>
 
@@ -145,9 +175,9 @@ const Partnership = () => {
                       name="price"
                       value={form.price}
                       onChange={handleChange}
-                      type="email"
+                      type="number"
                       placeholder="قیمت پیشنهادی خود را وارد نمایید"
-                      className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
                   </div>
                 </div>
@@ -158,10 +188,38 @@ const Partnership = () => {
                     name="domain"
                     value={form.domain}
                     onChange={handleChange}
-                    type="email"
+                    type="text"
                     placeholder="دامنه را وارد نمایید"
-                    className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                    className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                   />
+                </div>
+
+                {/*توضبحات*/}
+                <div className="md:col-span-1">
+                  <textarea
+                    name="des"
+                    value={form.des}
+                    onChange={handleChange}
+                    placeholder="توضیحات را وارد نمایید"
+                    className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  />
+                </div>
+
+                {/* capcha */}
+                <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="w-full ">
+                    <div className="mb-2 text-sm text-[var(--color-muted)]">
+                      حاصل {captcha.first} + {captcha.second} چند می‌شود؟
+                    </div>
+
+                    <input
+                      type="number"
+                      value={captchaValue}
+                      onChange={(e) => setCaptchaValue(e.target.value)}
+                      placeholder="پاسخ را وارد کنید"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                    />
+                  </div>
                 </div>
 
                 {/* دکمه ارسال */}

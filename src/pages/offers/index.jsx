@@ -4,7 +4,20 @@ import { FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
+const generateCaptcha = () => {
+  const first = Math.floor(Math.random() * 10) + 1;
+  const second = Math.floor(Math.random() * 10) + 1;
+
+  return {
+    first,
+    second,
+    answer: first + second,
+  };
+};
+
 const Offers = () => {
+  const [captcha, setCaptcha] = useState(generateCaptcha());
+  const [captchaValue, setCaptchaValue] = useState("");
   const { domain } = useParams();
   const domainName = domain || "myDomain.com";
   const [form, setForm] = useState({
@@ -28,6 +41,16 @@ const Offers = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess(false);
+
+    if (Number(captchaValue) !== captcha.answer) {
+      alert("پاسخ سوال امنیتی اشتباه است.");
+
+      setCaptcha(generateCaptcha());
+      setCaptchaValue("");
+
+      return;
+    }
     setLoading(true);
 
     try {
@@ -54,6 +77,8 @@ const Offers = () => {
           email: "",
           offer: "",
         });
+        setCaptcha(generateCaptcha());
+        setCaptchaValue("");
       }
     } catch (err) {
       console.log(err);
@@ -71,7 +96,10 @@ const Offers = () => {
       />
       <div className="app-container w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3">
-          <div className="col-span-2 flex flex-col gap-8 scroll-anim" style={{ "--from": "translateX(40px)" }}>
+          <div
+            className="col-span-2 flex flex-col gap-8 scroll-anim"
+            style={{ "--from": "translateX(40px)" }}
+          >
             <div className="bg-[var(--color-danger)] w-fit text-white p-2 rounded-xl">
               <h2>برای فروش!</h2>
             </div>
@@ -91,27 +119,30 @@ const Offers = () => {
             </div>
             <div className="flex flex-col lg:flex-row gap-5 lg:gap-15">
               <div>
-                <a href="" className="flex gap-3 items-center hover:text-[var(--color-text)]/70">
+                <a
+                  href=""
+                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                >
                   <FaPhone size={24} />
-                  <div className="text-lg">
-                    12345 - 021
-                  </div>
+                  <div className="text-lg">12345 - 021</div>
                 </a>
               </div>
               <div>
-                <a href="" className="flex gap-3 items-center hover:text-[var(--color-text)]/70">
+                <a
+                  href=""
+                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                >
                   <FaEnvelope size={24} />
-                  <div className="text-lg">
-                    test@gmail.com
-                  </div>
+                  <div className="text-lg">test@gmail.com</div>
                 </a>
               </div>
               <div>
-                <Link to={"/domains"} className="flex gap-3 items-center hover:text-[var(--color-text)]/70">
+                <Link
+                  to={"/domains"}
+                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                >
                   <FaGlobe size={24} />
-                  <div className="text-lg">
-                    مشاهده همه دامنه ها
-                  </div>
+                  <div className="text-lg">مشاهده همه دامنه ها</div>
                 </Link>
               </div>
             </div>
@@ -129,7 +160,10 @@ const Offers = () => {
             </div>
           </div>
 
-          <div className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 scroll-anim" style={{ "--from": "translateX(-40px)" }}>
+          <div
+            className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 scroll-anim"
+            style={{ "--from": "translateX(-40px)" }}
+          >
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد خرید</h2>
               <div className="text-[var(--color-muted)] text-lg">
@@ -144,7 +178,7 @@ const Offers = () => {
                   onChange={handleChange}
                   type="text"
                   placeholder="نام و نام خانوادگی خود را وارد نمایید"
-                  className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                 />
               </div>
 
@@ -154,9 +188,9 @@ const Offers = () => {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  type="text"
+                  type="number"
                   placeholder="شماره تماس خود را وارد نمایید"
-                  className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                 />
               </div>
 
@@ -168,7 +202,7 @@ const Offers = () => {
                   onChange={handleChange}
                   type="text"
                   placeholder="ایمیل خود را وارد نماید"
-                  className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                 />
               </div>
 
@@ -178,9 +212,23 @@ const Offers = () => {
                   name="offer"
                   value={form.offer}
                   onChange={handleChange}
-                  type="email"
+                  type="number"
                   placeholder="پیشنهاد خود را وارد نمایید"
-                  className="w-full rounded-xl border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                />
+              </div>
+              {/* capcha */}
+              <div className="flex flex-col gap-2">
+                <div className="text-sm text-[var(--color-smooth)] text-[var(--color-muted)]">
+                  حاصل {captcha.first} + {captcha.second} چند می‌شود؟
+                </div>
+
+                <input
+                  type="number"
+                  value={captchaValue}
+                  onChange={(e) => setCaptchaValue(e.target.value)}
+                  placeholder="پاسخ را وارد کنید"
+                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                 />
               </div>
 
