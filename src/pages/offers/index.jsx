@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import bg from "../../assets/images/bg.jpg";
 import { FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -18,8 +18,10 @@ const generateCaptcha = () => {
 const Offers = () => {
   const [captcha, setCaptcha] = useState(generateCaptcha());
   const [captchaValue, setCaptchaValue] = useState("");
-  const { domain } = useParams();
-  const domainName = domain || "myDomain.com";
+  // const { domain } = useParams();
+  const { domain: routeDomain } = useParams();
+  const domain = routeDomain || window.location.hostname;
+  // const domainName = domain || "myDomain.com";
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -29,6 +31,40 @@ const Offers = () => {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [domainData, setDomainData] = useState(null);
+  const [loadingDomain, setLoadingDomain] = useState(true);
+
+  useEffect(() => {
+    const fetchDomain = async () => {
+      try {
+        const res = await fetch(
+          "https://farnooshstudio.ir/api/wp-json/domain-manager/v1/domains",
+        );
+
+        const data = await res.json();
+
+        const selected = data.find(
+          (item) => item.domain.toLowerCase() === domain.toLowerCase(),
+        );
+
+        setDomainData(selected || null);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoadingDomain(false);
+      }
+    };
+
+    fetchDomain();
+  }, [domain]);
+
+  if (loadingDomain) {
+    return <div>در حال بارگذاری...</div>;
+  }
+
+  if (!domainData) {
+    return <div>دامنه موردنظر پیدا نشد.</div>;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,6 +96,7 @@ const Offers = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          domain: domainData.domain,
           fullName: form.name,
           mobile: form.phone,
           email: form.email,
@@ -97,25 +134,29 @@ const Offers = () => {
       <div className="app-container w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3">
           <div
-            className="col-span-2 flex flex-col gap-8 scroll-anim"
+            className="col-span-2 flex flex-col gap-8 "
             style={{ "--from": "translateX(40px)" }}
           >
             <div className="bg-[var(--color-danger)] w-fit text-white p-2 rounded-xl">
               <h2>برای فروش!</h2>
             </div>
             <h1 className="text-[40px] lg:text-[60px] text-[var(--color-text)]">
-              {domainName}
+              {/* {domainName} */}
+              {domainData?.domain}
             </h1>
             <div className="flex gap-3 items-center">
               <h3 className="text-[var(--color-text)]">ارزش تقریبی:</h3>
               <div className="flex gap-2 bg-[var(--color-success)] text-[var(--color-text)] p-2 rounded-xl">
-                <h3>1000</h3>
+                {/* <h3>1000</h3>
+                <h3>تومان</h3> */}
+                <h3>{domainData?.price}</h3>
                 <h3>تومان</h3>
               </div>
             </div>
             <div className="text-[var(--color-text)] text-lg">
-              دامنه مناسب کسب‌وکار خود را پیدا کنید و حضور آنلاین خود را با
-              اطمینان آغاز کنید.
+              {/* دامنه مناسب کسب‌وکار خود را پیدا کنید و حضور آنلاین خود را با
+              اطمینان آغاز کنید. */}
+              {domainData?.description}
             </div>
             <div className="flex flex-col lg:flex-row gap-5 lg:gap-15">
               <div>
@@ -161,7 +202,7 @@ const Offers = () => {
           </div>
 
           <div
-            className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 scroll-anim"
+            className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 "
             style={{ "--from": "translateX(-40px)" }}
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">

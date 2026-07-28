@@ -113,10 +113,10 @@ const Partnership = () => {
           <div className="flex flex-col gap-2 lg:w-[70%] mt-10 lg:mt-0">
             <div className="flex items-center justify-end w-full ">
               <Link
-                to={"/"}
+                to={"/domains"}
                 className="flex items-center gap-1 hover:text-[var(--color-text)]/70"
               >
-                <div>بازگشت به صفحه ثبت پیشنهاد</div>
+                <div>مشاهده تمام دامنه ها</div>
                 <FaLongArrowAltLeft size={15} />
               </Link>
             </div>

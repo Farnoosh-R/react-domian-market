@@ -1,77 +1,86 @@
 import bg from "../../assets/images/bg.jpg";
 import { FaSearch } from "react-icons/fa";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
-const domainData = [
-  {
-    id: 1,
-    domain: "mybrand.com",
-    status: "available",
-    price: "۸,۵۰۰,۰۰۰ تومان",
-    // details: "-",
+const statusMap = {
+  available: {
+    label: "موجود",
+    className: "bg-green-500/20 text-green-400 border border-green-500/30",
   },
-  {
-    id: 2,
-    domain: "greenhost.net",
-    status: "reserved",
-    price: "۳,۲۰۰,۰۰۰ تومان",
-    // details: "-",
+  reserved: {
+    label: "رزرو",
+    className: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
   },
-  {
-    id: 3,
-    domain: "startuphub.ir",
-    status: "available",
-    price: "۱,۹۵۰,۰۰۰ تومان",
-    // details: "-",
+  sold: {
+    label: "واگذار شده",
+    className: "bg-red-500/20 text-red-400 border border-red-500/30",
   },
-  {
-    id: 4,
-    domain: "fastcloud.org",
-    status: "sold",
-    price: "—",
-    // details: "-",
-  },
-  {
-    id: 5,
-    domain: "nextbrand.co",
-    status: "available",
-    price: "۵,۷۰۰,۰۰۰ تومان",
-    // details: "-",
-  },
-  {
-    id: 6,
-    domain: "nextbrand.co",
-    status: "available",
-    price: "۵,۷۰۰,۰۰۰ تومان",
-    // details: "-",
-  },
-];
+};
 
-// وضعیت‌ها
-// const statusMap = {
-//   available: {
-//     label: "موجود",
-//     className: "bg-green-500/20 text-green-400 border border-green-500/30",
-//   },
-//   reserved: {
-//     label: "رزرو شده",
-//     className: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
-//   },
-//   sold: {
-//     label: "فروخته شده",
-//     className: "bg-red-500/20 text-red-400 border border-red-500/30",
-//   },
-// };
+const formatPrice = (price) => {
+  if (!price) return "—";
+
+  return `${Number(price).toLocaleString("fa-IR")} تومان`;
+};
 
 const Domains = () => {
+  const [domains, setDomains] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredDomains = useMemo(() => {
-    return domainData.filter((item) =>
-      item.domain.toLowerCase().includes(search.toLowerCase()),
+  useEffect(() => {
+    const fetchDomains = async () => {
+      try {
+        const response = await fetch(
+          "https://farnooshstudio.ir/api/wp-json/domain-manager/v1/domains",
+        );
+
+        if (!response.ok) {
+          throw new Error("خطا در دریافت اطلاعات");
+        }
+
+        const data = await response.json();
+
+        setDomains(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDomains();
+  }, []);
+
+  const filteredDomains = domains.filter((item) => {
+    const value = search.trim().toLowerCase();
+
+    return (
+      item.domain?.toLowerCase().includes(value) ||
+      item.keyword1?.toLowerCase().includes(value) ||
+      item.keyword2?.toLowerCase().includes(value) ||
+      item.keyword3?.toLowerCase().includes(value)
     );
-  }, [search]);
+  });
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-white">
+        در حال دریافت اطلاعات...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div id="domains" className="relative min-h-screen py-10">
@@ -83,16 +92,12 @@ const Domains = () => {
 
       <div className="app-container">
         <div className="flex flex-col w-full gap-7">
-          {/* عنوان */}
           <div className="flex flex-col gap-2 items-center text-center">
-            <h2 className="text-white">
-              مشاهده تمام دامنه‌ها
-            </h2>
+            <h2 className="text-white">مشاهده تمام دامنه‌ها</h2>
 
             <div className="text-white/70">دامنه مورد نظر خود را پیدا کنید</div>
           </div>
 
-          {/* سرچ */}
           <div className="flex gap-2">
             <button className="bg-[var(--color-accent)] p-6 rounded-xl cursor-pointer hover:opacity-90 transition">
               <FaSearch size={24} />
@@ -107,81 +112,86 @@ const Domains = () => {
             />
           </div>
 
-          {/* جدول */}
-          <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)] scroll-anim" style={{ "--from": "translateY(40px)" }}>
-            {/* هدر */}
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white text-xl font-bold">
-                لیست دامنه‌های موجود
-              </h3>
+          
+       
+            <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)]">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-white text-xl font-bold">
+                  لیست دامنه‌های موجود
+                </h3>
 
-              <span className="text-white/60 text-sm">
-                {filteredDomains.length} دامنه
-              </span>
-            </div>
+                <span className="text-white/60 text-sm">
+                  {filteredDomains.length} دامنه
+                </span>
+              </div>
 
-            {/* اسکرول */}
-            <div className="max-h-[500px] overflow-y-auto rounded-2xl">
-              <table className="w-full text-right border-separate border-spacing-y-2">
-                <thead className="sticky top-0 bg-[#36383f] z-10">
-                  <tr>
-                    <th className="px-4 py-3 text-white/80 font-semibold rounded-r-xl">
-                      دامنه
-                    </th>
+              <div className="max-h-[500px] overflow-y-auto overflow-x-auto rounded-2xl">
+                <table className="w-full text-right border-separate border-spacing-y-2">
+                  <thead className="sticky top-0 bg-[#36383f] z-10">
+                    <tr>
+                      <th className="px-4 py-3 text-white/80 font-semibold rounded-r-xl">
+                        دامنه
+                      </th>
 
-                    <th className="px-4 py-3 text-white/80 font-semibold">
-                      وضعیت
-                    </th>
+                      <th className="px-4 py-3 text-white/80 font-semibold">
+                        وضعیت
+                      </th>
 
-                    <th className="px-4 py-3 text-white/80 font-semibold">
-                      قیمت
-                    </th>
+                      <th className="px-4 py-3 text-white/80 font-semibold">
+                        قیمت
+                      </th>
 
-                    <th className="px-4 py-3 text-white/80 font-semibold rounded-l-xl">
-                      جزئیات
-                    </th>
-                  </tr>
-                </thead>
+                      <th className="px-4 py-3 text-white/80 font-semibold rounded-l-xl">
+                        جزئیات
+                      </th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {filteredDomains.map((item) => {
-                    // const status = statusMap[item.status];
+                  <tbody>
+                    {filteredDomains.map((item) => {
+                      const status = statusMap[item.status] ?? {
+                        label: item.status,
+                        className:
+                          "bg-gray-500/20 text-gray-300 border border-gray-500/30",
+                      };
 
-                    return (
-                      <tr key={item.id} className="bg-[#36383f]">
-                        <td className="px-4 py-4 text-white font-semibold rounded-r-xl">
-                          {item.domain}
-                        </td>
+                      return (
+                        <tr key={item.id} className="bg-[#36383f]">
+                          <td className="px-4 py-4 text-white font-semibold rounded-r-xl">
+                            {item.domain}
+                          </td>
 
-                        <td className="px-4 py-4">
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm bg-green-500/20 text-green-400 border border-green-500/30`}
-                          >
-                            موجود
-                          </span>
-                        </td>
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <span
+                              className={`px-3 py-1 rounded-full text-sm ${status.className}`}
+                            >
+                              {status.label}
+                            </span>
+                          </td>
 
-                        <td className="px-4 py-4 text-white">{item.price}</td>
+                          <td className="px-4 py-4 text-white whitespace-nowrap">
+                            {formatPrice(item.price)}
+                          </td>
 
-                        <td className="px-4 py-4 text-white/70 rounded-l-xl">
-                          <Link
-                            to={`/domain/${item.domain}`}
-                            className="hover:text-[#05df72] transition-colors"
-                          >
-                            {/* {item.details} */}
-                            ثبت درخواست
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          <td className="px-4 py-4 text-white/70 rounded-l-xl whitespace-nowrap">
+                            <Link
+                              to={`/domain/${item.domain}`}
+                              className="hover:text-[#05df72] transition-colors"
+                            >
+                              ثبت درخواست
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default Domains;
