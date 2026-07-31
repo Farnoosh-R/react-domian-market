@@ -1,4 +1,4 @@
-import bg from "../../assets/images/bg.jpg";
+import bg from "../../assets/images/bg.png";
 import { FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";

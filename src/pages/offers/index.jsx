@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
-import bg from "../../assets/images/bg.jpg";
+import bg from "../../assets/images/bg.png";
 import { FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import {
+  FaTelegramPlane,
+  FaLinkedinIn,
+  FaInstagram,
+  FaWhatsapp,
+  FaYoutube,
+} from "react-icons/fa";
+import bale from "../../assets/images/bale.png"
 
 const generateCaptcha = () => {
   const first = Math.floor(Math.random() * 10) + 1;
@@ -33,6 +41,12 @@ const Offers = () => {
   const [success, setSuccess] = useState(false);
   const [domainData, setDomainData] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
+  const defaultDomain = {
+  domain: "domian.com",
+  price: "2000,000",
+  description:
+    "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
+};
 
   useEffect(() => {
     const fetchDomain = async () => {
@@ -43,11 +57,11 @@ const Offers = () => {
 
         const data = await res.json();
 
-        const selected = data.find(
-          (item) => item.domain.toLowerCase() === domain.toLowerCase(),
-        );
+     const selected = data.find(
+  (item) => item.domain?.toLowerCase() === domain?.toLowerCase()
+);
 
-        setDomainData(selected || null);
+        setDomainData(selected || defaultDomain);
       } catch (err) {
         console.log(err);
       } finally {
@@ -62,9 +76,9 @@ const Offers = () => {
     return <div>در حال بارگذاری...</div>;
   }
 
-  if (!domainData) {
-    return <div>دامنه موردنظر پیدا نشد.</div>;
-  }
+  // if (!domainData) {
+  //   return <div>دامنه موردنظر پیدا نشد.</div>;
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,7 +148,7 @@ const Offers = () => {
       <div className="app-container w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3">
           <div
-            className="col-span-2 flex flex-col gap-8 "
+            className="col-span-2 flex flex-col gap-7 items-center lg:items-start"
             style={{ "--from": "translateX(40px)" }}
           >
             <div className="bg-[var(--color-danger)] w-fit text-white p-2 rounded-xl">
@@ -179,7 +193,8 @@ const Offers = () => {
               </div>
               <div>
                 <Link
-                  to={"/domains"}
+                  // to={"/domains"}
+                  to={"/"}
                   className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
                 >
                   <FaGlobe size={24} />
@@ -189,23 +204,70 @@ const Offers = () => {
             </div>
             <div className="flex flex-col gap-5 bg-gray-500/20 p-4 rounded-xl w-fit">
               <div className="text-lg">
-                برای همکاری در فروش دامنه، مشارکت در پروژه‌ها و توسعه فرصت‌های
-                تجاری با ما در ارتباط باشید.
+               دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس هزاران خریدار قرار گیرد.
               </div>
               <Link
                 to={"/partnership"}
-                className="bg-[var(--color-accent)] w-fit p-3 rounded-xl text-lg hover:opacity-90 transition-all"
+                className="bg-[var(--color-accent)] w-fit p-2 rounded-xl text-lg hover:opacity-90 transition-all mx-auto lg:mx-0"
               >
                 درخواست همکاری
               </Link>
             </div>
+             <div className="flex gap-3">
+            <Link to={"#"}>
+              <FaTelegramPlane
+                size={18}
+                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+              />
+            </Link>
+            <a
+              href="https://www.linkedin.com/in/amiraliqorbani"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaLinkedinIn
+                size={18}
+                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+              />
+            </a>
+            <Link to={"#"}>
+              <FaInstagram
+                size={18}
+                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+              />
+            </Link>
+            <a
+              href="https://wa.me/989128939845"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp
+                size={18}
+                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+              />
+            </a>
+            <a
+              href="https://ble.ir/amiralighorbani2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={bale} className="w-4 transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]" alt="bale" />
+            </a>
+            <Link to={"#"}>
+              <FaYoutube
+                size={18}
+                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+              />
+            </Link>
+          </div>
+
           </div>
 
           <div
             className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 "
             style={{ "--from": "translateX(-40px)" }}
           >
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد خرید</h2>
               <div className="text-[var(--color-muted)] text-lg">
                 لطفاً فرم زیر را تکمیل کنید تا پیشنهاد شما برای فروشنده ارسال

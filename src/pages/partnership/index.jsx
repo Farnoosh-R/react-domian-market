@@ -1,5 +1,5 @@
 import { useState } from "react";
-import bg from "../../assets/images/bg.jpg";
+import bg from "../../assets/images/bg.png";
 import { FaHandshake } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -113,7 +113,8 @@ const Partnership = () => {
           <div className="flex flex-col gap-2 lg:w-[70%] mt-10 lg:mt-0">
             <div className="flex items-center justify-end w-full ">
               <Link
-                to={"/domains"}
+                // to={"/domains"}
+                to={"/"}
                 className="flex items-center gap-1 hover:text-[var(--color-text)]/70"
               >
                 <div>مشاهده تمام دامنه ها</div>
