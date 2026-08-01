@@ -25,7 +25,6 @@ const Partnership = () => {
     email: "",
     domain: "",
     price: "",
-    des: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -65,7 +64,6 @@ const Partnership = () => {
           email: form.email,
           domain: form.domain,
           price: form.price,
-          des: form.des,
         }),
       });
 
@@ -79,7 +77,6 @@ const Partnership = () => {
           email: "",
           domain: "",
           price: "",
-          des: "",
         });
         setCaptcha(generateCaptcha());
         setCaptchaValue("");
@@ -92,25 +89,24 @@ const Partnership = () => {
   };
 
   return (
-    <div id="partnership" className="relative min-h-screen py-10">
+    <div id="partnership" className="relative min-h-screen py-8">
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-10 w-full h-full"
         alt=""
       />
       <div className="app-container">
-        <div className="flex flex-col gap-3 lg:gap-12 justify-center items-center">
-          <div className="text-center">
+        <div className="flex flex-col gap-3 lg:gap-5 justify-center items-center">
+          <div className="">
             <div className="flex gap-2 items-center">
               <FaHandshake size={35} color="var(--color-accent)" />
               <h2>درخواست همکاری</h2>
             </div>
-            <div className="text-lg text-white">
-              اگر در زمینه فروش دامنه فعالیت می‌کنید، خوشحال می‌شویم درباره
-              فرصت‌های همکاری با شما گفتگو کنیم.
+            <div className="text-lg text-white text-justify">
+             دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس هزاران خریدار قرار گیرد.
             </div>
           </div>
-          <div className="flex flex-col gap-2 lg:w-[70%] mt-10 lg:mt-0">
+          <div className="flex flex-col gap-2 lg:w-[80%] mt-10 lg:mt-0">
             <div className="flex items-center justify-end w-full ">
               <Link
                 // to={"/domains"}
@@ -125,11 +121,10 @@ const Partnership = () => {
               className=" bg-[var(--color-soft)] rounded-xl p-7 scroll-anim"
               style={{ "--from": "translateY(40px)" }}
             >
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد فروش</h2>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <h2 className="text-[var(--color-smooth)]">ثبت رایگان آگهی دامنه</h2>
                 <div className="text-[var(--color-muted)] text-lg">
-                  لطفاً فرم زیر را تکمیل کنید تا درخواست همکاری شما توسط تیم ما
-                  بررسی شود.
+                لطفا فرم زیر را پر کنید تا ثبت آگهی دامنه شما توسط همکاران ما بررسی شود.
                 </div>
                 <div className="flex flex-col lg:flex-row gap-3 w-full">
                   {/* نام و نام خانوادگی */}
@@ -191,17 +186,6 @@ const Partnership = () => {
                     onChange={handleChange}
                     type="text"
                     placeholder="دامنه را وارد نمایید"
-                    className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
-                  />
-                </div>
-
-                {/*توضبحات*/}
-                <div className="md:col-span-1">
-                  <textarea
-                    name="des"
-                    value={form.des}
-                    onChange={handleChange}
-                    placeholder="توضیحات را وارد نمایید"
                     className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                   />
                 </div>

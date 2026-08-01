@@ -43,7 +43,7 @@ const Offers = () => {
   const [loadingDomain, setLoadingDomain] = useState(true);
   const defaultDomain = {
   domain: "domian.com",
-  price: "2000,000",
+  price: "2,000,000",
   description:
     "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
 };
@@ -140,6 +140,7 @@ const Offers = () => {
 
   return (
     <div id="offers" className="relative min-h-screen flex items-center py-10">
+
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-1 w-full h-full"
@@ -151,32 +152,28 @@ const Offers = () => {
             className="col-span-2 flex flex-col gap-7 items-center lg:items-start"
             style={{ "--from": "translateX(40px)" }}
           >
-            <div className="bg-[var(--color-danger)] w-fit text-white p-2 rounded-xl">
-              <h2>برای فروش!</h2>
+            <div className="bg-[var(--color-danger)] w-fit text-white py-2 px-4  rounded-xl">
+              <h2>این دامنه برای فروش است!</h2>
             </div>
             <h1 className="text-[40px] lg:text-[60px] text-[var(--color-text)]">
               {/* {domainName} */}
               {domainData?.domain}
             </h1>
-            <div className="flex gap-3 items-center">
+            <div className="flex flex-col md:flex-row gap-3 items-center">
               <h3 className="text-[var(--color-text)]">ارزش تقریبی:</h3>
               <div className="flex gap-2 bg-[var(--color-success)] text-[var(--color-text)] p-2 rounded-xl">
-                {/* <h3>1000</h3>
-                <h3>تومان</h3> */}
                 <h3>{domainData?.price}</h3>
                 <h3>تومان</h3>
               </div>
             </div>
-            <div className="text-[var(--color-text)] text-lg">
-              {/* دامنه مناسب کسب‌وکار خود را پیدا کنید و حضور آنلاین خود را با
-              اطمینان آغاز کنید. */}
+            <div className="text-[var(--color-text)] text-lg text-justify">
               {domainData?.description}
             </div>
             <div className="flex flex-col lg:flex-row gap-5 lg:gap-15">
               <div>
                 <a
                   href=""
-                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                  className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaPhone size={24} />
                   <div className="text-lg">12345 - 021</div>
@@ -185,7 +182,7 @@ const Offers = () => {
               <div>
                 <a
                   href=""
-                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                  className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaEnvelope size={24} />
                   <div className="text-lg">test@gmail.com</div>
@@ -195,7 +192,7 @@ const Offers = () => {
                 <Link
                   // to={"/domains"}
                   to={"/"}
-                  className="flex gap-3 items-center hover:text-[var(--color-text)]/70"
+                  className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaGlobe size={24} />
                   <div className="text-lg">مشاهده همه دامنه ها</div>
@@ -203,14 +200,14 @@ const Offers = () => {
               </div>
             </div>
             <div className="flex flex-col gap-5 bg-gray-500/20 p-4 rounded-xl w-fit">
-              <div className="text-lg">
+              <div className="text-lg text-justify">
                دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس هزاران خریدار قرار گیرد.
               </div>
               <Link
                 to={"/partnership"}
-                className="bg-[var(--color-accent)] w-fit p-2 rounded-xl text-lg hover:opacity-90 transition-all mx-auto lg:mx-0"
+                className="bg-[var(--color-accent)] w-fit py-2 px-3 rounded-xl text-lg hover:opacity-90 transition-all mx-auto lg:mx-0"
               >
-                درخواست همکاری
+                آگهی فروش دامنه
               </Link>
             </div>
              <div className="flex gap-3">
