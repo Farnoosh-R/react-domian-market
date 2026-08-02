@@ -54,11 +54,6 @@
     --color-smooth: #282b2f;
 
 
-
-
-
-  
-
     /* Border */
     --border: var(--gray-10);
 
@@ -129,6 +124,18 @@
   h6 {
     @apply text-sm md:text-base lg:text-[1rem] leading-[1.5] font-medium;
   }
+
+  /* Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 }
 @layer components {
   .app-container {

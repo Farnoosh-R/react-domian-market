@@ -30,14 +30,41 @@ const Partnership = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
+
+  // فقط برای فیلد قیمت
+  if (name === "price") {
+    const rawValue = value.replace(/,/g, "");
+
+    // فقط عدد مجاز است
+    if (!/^\d*$/.test(rawValue)) return;
 
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      price:
+        rawValue === ""
+          ? ""
+          : Number(rawValue).toLocaleString("en-US"),
     }));
-  };
+
+    return;
+  }
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +90,7 @@ const Partnership = () => {
           mobile: form.phone,
           email: form.email,
           domain: form.domain,
-          price: form.price,
+          price: form.price.replace(/,/g, ""),
         }),
       });
 
@@ -88,6 +115,7 @@ const Partnership = () => {
     }
   };
 
+
   return (
     <div id="partnership" className="relative min-h-screen py-8">
       <img
@@ -103,7 +131,8 @@ const Partnership = () => {
               <h2>درخواست همکاری</h2>
             </div>
             <div className="text-lg text-white text-justify">
-             دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس هزاران خریدار قرار گیرد.
+              دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس
+              هزاران خریدار قرار گیرد.
             </div>
           </div>
           <div className="flex flex-col gap-2 lg:w-[80%] mt-10 lg:mt-0">
@@ -122,9 +151,12 @@ const Partnership = () => {
               style={{ "--from": "translateY(40px)" }}
             >
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                <h2 className="text-[var(--color-smooth)]">ثبت رایگان آگهی دامنه</h2>
+                <h2 className="text-[var(--color-smooth)]">
+                  ثبت رایگان آگهی دامنه
+                </h2>
                 <div className="text-[var(--color-muted)] text-lg">
-                لطفا فرم زیر را پر کنید تا ثبت آگهی دامنه شما توسط همکاران ما بررسی شود.
+                  لطفا فرم زیر را پر کنید تا ثبت آگهی دامنه شما توسط همکاران ما
+                  بررسی شود.
                 </div>
                 <div className="flex flex-col lg:flex-row gap-3 w-full">
                   {/* نام و نام خانوادگی */}
@@ -146,6 +178,7 @@ const Partnership = () => {
                       value={form.phone}
                       onChange={handleChange}
                       type="number"
+                      inputMode="numeric"
                       placeholder="شماره تماس خود را وارد نمایید"
                       className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
@@ -166,15 +199,22 @@ const Partnership = () => {
                   </div>
 
                   {/* قیمت*/}
-                  <div className="w-full">
+
+                  <div className="relative w-full">
                     <input
                       name="price"
                       value={form.price}
                       onChange={handleChange}
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       placeholder="قیمت پیشنهادی خود را وارد نمایید"
-                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      className="w-full rounded-xl border-2 border-gray-300 px-4 pl-20 py-3 text-[var(--color-smooth)] outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />
+
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                      تومان
+                    </span>
                   </div>
                 </div>
 
@@ -190,32 +230,34 @@ const Partnership = () => {
                   />
                 </div>
 
-                {/* capcha */}
-                <div className="flex flex-col lg:flex-row gap-3">
-                  <div className="w-full ">
-                    <div className="mb-2 text-sm text-[var(--color-muted)]">
-                      حاصل {captcha.first} + {captcha.second} چند می‌شود؟
+                <div className="flex flex-col lg:flex-row gap-3 items-baseline-last">
+                  {/* capcha */}
+                  <div className="flex flex-col lg:flex-row gap-3 w-full lg:w-1/2">
+                    <div className="w-full ">
+                      <div className="mb-2 text-sm text-[var(--color-muted)]">
+                        حاصل {captcha.first} + {captcha.second} چند می‌شود؟
+                      </div>
+
+                      <input
+                        type="number"
+                        value={captchaValue}
+                        onChange={(e) => setCaptchaValue(e.target.value)}
+                        placeholder="پاسخ را وارد کنید"
+                        className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                      />
                     </div>
-
-                    <input
-                      type="number"
-                      value={captchaValue}
-                      onChange={(e) => setCaptchaValue(e.target.value)}
-                      placeholder="پاسخ را وارد کنید"
-                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
-                    />
                   </div>
-                </div>
 
-                {/* دکمه ارسال */}
-                <div className="md:col-span-2">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-[var(--color-accent)] w-full cursor-pointer hover:opacity-90 transition-all text-white px-8 py-2 rounded-xl"
-                  >
-                    {loading ? "در حال ارسال..." : "ارسال پیشنهاد"}
-                  </button>
+                  {/* دکمه ارسال */}
+                  <div className="md:col-span-2">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-[var(--color-accent)] w-full cursor-pointer hover:opacity-90 transition-all text-white px-8 py-2 rounded-xl"
+                    >
+                      {loading ? "در حال ارسال..." : "ارسال پیشنهاد"}
+                    </button>
+                  </div>
                 </div>
                 {success && (
                   <div className="text-green-600 mt-4">

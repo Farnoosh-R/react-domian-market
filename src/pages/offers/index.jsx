@@ -10,7 +10,7 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
-import bale from "../../assets/images/bale.png"
+import bale from "../../assets/images/bale.png";
 
 const generateCaptcha = () => {
   const first = Math.floor(Math.random() * 10) + 1;
@@ -33,7 +33,6 @@ const Offers = () => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    email: "",
     offer: "",
   });
 
@@ -42,11 +41,11 @@ const Offers = () => {
   const [domainData, setDomainData] = useState(null);
   const [loadingDomain, setLoadingDomain] = useState(true);
   const defaultDomain = {
-  domain: "domian.com",
-  price: "2,000,000",
-  description:
-    "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
-};
+    domain: "domian.com",
+    price: 2000000,
+    description:
+      "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
+  };
 
   useEffect(() => {
     const fetchDomain = async () => {
@@ -57,9 +56,9 @@ const Offers = () => {
 
         const data = await res.json();
 
-     const selected = data.find(
-  (item) => item.domain?.toLowerCase() === domain?.toLowerCase()
-);
+        const selected = data.find(
+          (item) => item.domain?.toLowerCase() === domain?.toLowerCase(),
+        );
 
         setDomainData(selected || defaultDomain);
       } catch (err) {
@@ -82,6 +81,19 @@ const Offers = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "offer") {
+      const rawValue = value.replace(/,/g, "");
+
+      if (!/^\d*$/.test(rawValue)) return;
+
+      setForm((prev) => ({
+        ...prev,
+        offer: rawValue === "" ? "" : Number(rawValue).toLocaleString("en-US"),
+      }));
+
+      return;
+    }
 
     setForm((prev) => ({
       ...prev,
@@ -113,8 +125,7 @@ const Offers = () => {
           domain: domainData.domain,
           fullName: form.name,
           mobile: form.phone,
-          email: form.email,
-          offer: form.offer,
+          offer: form.offer.replace(/,/g, ""),
         }),
       });
 
@@ -125,7 +136,6 @@ const Offers = () => {
         setForm({
           name: "",
           phone: "",
-          email: "",
           offer: "",
         });
         setCaptcha(generateCaptcha());
@@ -140,7 +150,6 @@ const Offers = () => {
 
   return (
     <div id="offers" className="relative min-h-screen flex items-center py-10">
-
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-1 w-full h-full"
@@ -162,7 +171,7 @@ const Offers = () => {
             <div className="flex flex-col md:flex-row gap-3 items-center">
               <h3 className="text-[var(--color-text)]">ارزش تقریبی:</h3>
               <div className="flex gap-2 bg-[var(--color-success)] text-[var(--color-text)] p-2 rounded-xl">
-                <h3>{domainData?.price}</h3>
+                <h3>{Number(domainData?.price).toLocaleString("en-US")}</h3>
                 <h3>تومان</h3>
               </div>
             </div>
@@ -201,7 +210,8 @@ const Offers = () => {
             </div>
             <div className="flex flex-col gap-5 bg-gray-500/20 p-4 rounded-xl w-fit">
               <div className="text-lg text-justify">
-               دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در دسترس هزاران خریدار قرار گیرد.
+                دامنه خود را رایگان ثبت کنید تا در بازار فروش دامنه سایت در
+                دسترس هزاران خریدار قرار گیرد.
               </div>
               <Link
                 to={"/partnership"}
@@ -210,54 +220,57 @@ const Offers = () => {
                 آگهی فروش دامنه
               </Link>
             </div>
-             <div className="flex gap-3">
-            <Link to={"#"}>
-              <FaTelegramPlane
-                size={18}
-                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-              />
-            </Link>
-            <a
-              href="https://www.linkedin.com/in/amiraliqorbani"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaLinkedinIn
-                size={18}
-                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-              />
-            </a>
-            <Link to={"#"}>
-              <FaInstagram
-                size={18}
-                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-              />
-            </Link>
-            <a
-              href="https://wa.me/989128939845"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp
-                size={18}
-                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-              />
-            </a>
-            <a
-              href="https://ble.ir/amiralighorbani2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={bale} className="w-4 transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]" alt="bale" />
-            </a>
-            <Link to={"#"}>
-              <FaYoutube
-                size={18}
-                className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-              />
-            </Link>
-          </div>
-
+            <div className="flex gap-3">
+              <Link to={"#"}>
+                <FaTelegramPlane
+                  size={18}
+                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                />
+              </Link>
+              <a
+                href="https://www.linkedin.com/in/amiraliqorbani"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaLinkedinIn
+                  size={18}
+                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                />
+              </a>
+              <Link to={"#"}>
+                <FaInstagram
+                  size={18}
+                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                />
+              </Link>
+              <a
+                href="https://wa.me/989128939845"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaWhatsapp
+                  size={18}
+                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                />
+              </a>
+              <a
+                href="https://ble.ir/amiralighorbani2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={bale}
+                  className="w-4 transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                  alt="bale"
+                />
+              </a>
+              <Link to={"#"}>
+                <FaYoutube
+                  size={18}
+                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
+                />
+              </Link>
+            </div>
           </div>
 
           <div
@@ -289,33 +302,29 @@ const Offers = () => {
                   value={form.phone}
                   onChange={handleChange}
                   type="number"
+                  inputMode="numeric"
                   placeholder="شماره تماس خود را وارد نمایید"
                   className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                 />
               </div>
-
-              {/* ایمیل */}
-              <div className="md:col-span-1">
-                <input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="ایمیل خود را وارد نماید"
-                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
-                />
-              </div>
-
               {/* پیشنهاد */}
               <div className="md:col-span-1">
-                <input
-                  name="offer"
-                  value={form.offer}
-                  onChange={handleChange}
-                  type="number"
-                  placeholder="پیشنهاد خود را وارد نمایید"
-                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
-                />
+                <div className="relative">
+                  <input
+                    name="offer"
+                    value={form.offer}
+                    onChange={handleChange}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="پیشنهاد خود را وارد نمایید"
+                    className="w-full rounded-xl border-2 border-gray-300 px-4 pl-20 py-3 text-[var(--color-smooth)] outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                  />
+
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                    تومان
+                  </span>
+                </div>
               </div>
               {/* capcha */}
               <div className="flex flex-col gap-2">
