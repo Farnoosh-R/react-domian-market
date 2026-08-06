@@ -43,6 +43,8 @@ const Offers = () => {
   const defaultDomain = {
     domain: "domian.com",
     price: 2000000,
+    phone: "02112345678",
+    email: "info@example.com",
     description:
       "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
   };
@@ -74,10 +76,6 @@ const Offers = () => {
   if (loadingDomain) {
     return <div>در حال بارگذاری...</div>;
   }
-
-  // if (!domainData) {
-  //   return <div>دامنه موردنظر پیدا نشد.</div>;
-  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -181,26 +179,29 @@ const Offers = () => {
             <div className="flex flex-col lg:flex-row gap-5 lg:gap-15">
               <div>
                 <a
-                  href=""
+                  href={`tel:${domainData?.phone}`}
                   className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaPhone size={24} />
-                  <div className="text-lg">12345 - 021</div>
+                  <div className="text-lg">
+                    {domainData?.phone || "021-12345678"}
+                  </div>
                 </a>
               </div>
               <div>
                 <a
-                  href=""
+                  href={`mailto:${domainData?.email}`}
                   className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaEnvelope size={24} />
-                  <div className="text-lg">test@gmail.com</div>
+                  <div className="text-lg">
+                    {domainData?.email || "info@example.com"}
+                  </div>
                 </a>
               </div>
               <div>
                 <Link
-                  // to={"/domains"}
-                  to={"/"}
+                  to={"/domains"}
                   className="flex gap-3 items-center justify-center hover:text-[var(--color-text)]/70"
                 >
                   <FaGlobe size={24} />

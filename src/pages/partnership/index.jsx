@@ -30,15 +30,6 @@ const Partnership = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   setForm((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
   const handleChange = (e) => {
   const { name, value } = e.target;
 
@@ -138,8 +129,7 @@ const Partnership = () => {
           <div className="flex flex-col gap-2 lg:w-[80%] mt-10 lg:mt-0">
             <div className="flex items-center justify-end w-full ">
               <Link
-                // to={"/domains"}
-                to={"/"}
+                to={"/domains"}
                 className="flex items-center gap-1 hover:text-[var(--color-text)]/70"
               >
                 <div>مشاهده تمام دامنه ها</div>
