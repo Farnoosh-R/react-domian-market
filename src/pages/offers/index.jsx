@@ -114,18 +114,21 @@ const Offers = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://test.ir/api/wp-json/custom/v1/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://domigo.ir/api/wp-json/custom/v1/offers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            domain: domainData.domain,
+            offer: form.offer.replace(/,/g, ""),
+          }),
         },
-        body: JSON.stringify({
-          domain: domainData.domain,
-          fullName: form.name,
-          mobile: form.phone,
-          offer: form.offer.replace(/,/g, ""),
-        }),
-      });
+      );
 
       const data = await res.json();
 
@@ -317,7 +320,6 @@ const Offers = () => {
                     onChange={handleChange}
                     type="text"
                     inputMode="numeric"
-                    pattern="[0-9]*"
                     placeholder="پیشنهاد خود را وارد نمایید"
                     className="w-full rounded-xl border-2 border-gray-300 px-4 pl-20 py-3 text-[var(--color-smooth)] outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                   />

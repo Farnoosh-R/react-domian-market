@@ -31,31 +31,28 @@ const Partnership = () => {
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
-  const { name, value } = e.target;
+    const { name, value } = e.target;
 
-  // فقط برای فیلد قیمت
-  if (name === "price") {
-    const rawValue = value.replace(/,/g, "");
+    // فقط برای فیلد قیمت
+    if (name === "price") {
+      const rawValue = value.replace(/,/g, "");
 
-    // فقط عدد مجاز است
-    if (!/^\d*$/.test(rawValue)) return;
+      // فقط عدد مجاز است
+      if (!/^\d*$/.test(rawValue)) return;
+
+      setForm((prev) => ({
+        ...prev,
+        price: rawValue === "" ? "" : Number(rawValue).toLocaleString("en-US"),
+      }));
+
+      return;
+    }
 
     setForm((prev) => ({
       ...prev,
-      price:
-        rawValue === ""
-          ? ""
-          : Number(rawValue).toLocaleString("en-US"),
+      [name]: value,
     }));
-
-    return;
-  }
-
-  setForm((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,19 +68,22 @@ const Partnership = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://test.ir/api/wp-json/custom/v1/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://domigo.ir/api/wp-json/custom/v1/partnership",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            email: form.email,
+            domain: form.domain,
+            price: form.price.replace(/,/g, ""),
+          }),
         },
-        body: JSON.stringify({
-          fullName: form.name,
-          mobile: form.phone,
-          email: form.email,
-          domain: form.domain,
-          price: form.price.replace(/,/g, ""),
-        }),
-      });
+      );
 
       const data = await res.json();
 
@@ -105,7 +105,6 @@ const Partnership = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <div id="partnership" className="relative min-h-screen py-8">
@@ -197,7 +196,6 @@ const Partnership = () => {
                       onChange={handleChange}
                       type="text"
                       inputMode="numeric"
-                      pattern="[0-9]*"
                       placeholder="قیمت پیشنهادی خود را وارد نمایید"
                       className="w-full rounded-xl border-2 border-gray-300 px-4 pl-20 py-3 text-[var(--color-smooth)] outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
                     />

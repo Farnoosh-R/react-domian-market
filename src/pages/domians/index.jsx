@@ -4,25 +4,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 
-const statusMap = {
-  available: {
-    label: "موجود",
-    className: "bg-green-500/20 text-green-400 border border-green-500/30",
-  },
-  reserved: {
-    label: "رزرو",
-    className: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
-  },
-  sold: {
-    label: "واگذار شده",
-    className: "bg-red-500/20 text-red-400 border border-red-500/30",
-  },
-};
 
 const formatPrice = (price) => {
   if (!price) return "—";
 
-  return `${Number(price).toLocaleString("fa-IR")} تومان`;
+  const numericPrice = Number(String(price).replace(/,/g, ""));
+
+  if (isNaN(numericPrice)) return "—";
+
+  return `${numericPrice.toLocaleString("fa-IR")} تومان`;
 };
 
 const Domains = () => {
@@ -35,7 +25,7 @@ const Domains = () => {
     const fetchDomains = async () => {
       try {
         const response = await fetch(
-          "https://farnooshstudio.ir/api/wp-json/domain-manager/v1/domains",
+          "https://domigo.ir/api/wp-json/domain-manager/v1/domains",
         );
 
         if (!response.ok) {
@@ -112,81 +102,61 @@ const Domains = () => {
             />
           </div>
 
-          
-       
-            <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)]">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white text-xl font-bold">
-                  لیست دامنه‌های موجود
-                </h3>
+          <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)]">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white text-xl font-bold">
+                لیست دامنه‌های موجود
+              </h3>
 
-                <span className="text-white/60 text-sm">
-                  {filteredDomains.length} دامنه
-                </span>
-              </div>
+              <span className="text-white/60 text-sm">
+                {filteredDomains.length} دامنه
+              </span>
+            </div>
 
-              <div className="max-h-[500px] overflow-y-auto overflow-x-auto rounded-2xl">
-                <table className="w-full text-right border-separate border-spacing-y-2">
-                  <thead className="sticky top-0 bg-[#36383f] z-10">
-                    <tr>
-                      <th className="px-4 py-3 text-white/80 font-semibold rounded-r-xl">
-                        دامنه
-                      </th>
+            <div className="max-h-[500px] overflow-y-auto overflow-x-auto rounded-2xl">
+              <table className="w-full text-right border-separate border-spacing-y-2">
+                <thead className="sticky top-0 bg-[#36383f] z-10">
+                  <tr>
+                    <th className="px-4 py-3 text-white/80 font-semibold rounded-r-xl">
+                      دامنه
+                    </th>
 
-                      <th className="px-4 py-3 text-white/80 font-semibold">
-                        وضعیت
-                      </th>
+                    <th className="px-4 py-3 text-white/80 font-semibold">
+                      قیمت
+                    </th>
 
-                      <th className="px-4 py-3 text-white/80 font-semibold">
-                        قیمت
-                      </th>
+                    <th className="px-4 py-3 text-white/80 font-semibold rounded-l-xl">
+                      جزئیات
+                    </th>
+                  </tr>
+                </thead>
 
-                      <th className="px-4 py-3 text-white/80 font-semibold rounded-l-xl">
-                        جزئیات
-                      </th>
-                    </tr>
-                  </thead>
+                <tbody>
+                  {filteredDomains.map((item) => {
 
-                  <tbody>
-                    {filteredDomains.map((item) => {
-                      const status = statusMap[item.status] ?? {
-                        label: item.status,
-                        className:
-                          "bg-gray-500/20 text-gray-300 border border-gray-500/30",
-                      };
+                    return (
+                      <tr key={item.id} className="bg-[#36383f]">
+                        <td className="px-4 py-4 text-white font-semibold rounded-r-xl">
+                          {item.domain}
+                        </td>
 
-                      return (
-                        <tr key={item.id} className="bg-[#36383f]">
-                          <td className="px-4 py-4 text-white font-semibold rounded-r-xl">
-                            {item.domain}
-                          </td>
-
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-3 py-1 rounded-full text-sm ${status.className}`}
-                            >
-                              {status.label}
-                            </span>
-                          </td>
-
-                          <td className="px-4 py-4 text-white whitespace-nowrap">
-                            {formatPrice(item.price)}
-                          </td>
-
-                          <td className="px-4 py-4 text-white/70 rounded-l-xl whitespace-nowrap">
-                            <Link
-                              to={`/domain/${item.domain}`}
-                              className="hover:text-[#05df72] transition-colors"
-                            >
-                              ثبت درخواست
-                            </Link>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                        <td className="px-4 py-4 text-white whitespace-nowrap">
+                          {formatPrice(item.price)}
+                        </td>
+                        <td className="px-4 py-4 rounded-l-xl whitespace-nowrap">
+                          <Link
+                            to={`/domain/${item.domain}`}
+                            className="text-white/70 hover:text-[#05df72] transition-colors"
+                          >
+                            ثبت درخواست
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
