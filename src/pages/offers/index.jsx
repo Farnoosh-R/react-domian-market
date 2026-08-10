@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import bg from "../../assets/images/bg.png";
 import { FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   FaTelegramPlane,
   FaLinkedinIn,
@@ -26,10 +25,11 @@ const generateCaptcha = () => {
 const Offers = () => {
   const [captcha, setCaptcha] = useState(generateCaptcha());
   const [captchaValue, setCaptchaValue] = useState("");
-  // const { domain } = useParams();
   const { domain: routeDomain } = useParams();
-  const domain = routeDomain || window.location.hostname;
-  // const domainName = domain || "myDomain.com";
+  const domain = (routeDomain || window.location.hostname)
+    .replace(/^www\./, "")
+    .toLowerCase();
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -53,16 +53,17 @@ const Offers = () => {
     const fetchDomain = async () => {
       try {
         const res = await fetch(
-          "https://farnooshstudio.ir/api/wp-json/domain-manager/v1/domains",
+          "https://domigo.ir/api/wp-json/domain-manager/v1/domains",
         );
 
         const data = await res.json();
 
         const selected = data.find(
-          (item) => item.domain?.toLowerCase() === domain?.toLowerCase(),
+          (item) => item.domain?.replace(/^www\./, "").toLowerCase() === domain,
         );
 
         setDomainData(selected || defaultDomain);
+
       } catch (err) {
         console.log(err);
       } finally {
@@ -71,6 +72,7 @@ const Offers = () => {
     };
 
     fetchDomain();
+    console.log("window.location.hostname", window.location.hostname);
   }, [domain]);
 
   if (loadingDomain) {
@@ -157,7 +159,7 @@ const Offers = () => {
         alt=""
       />
       <div className="app-container w-full z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div
             className="col-span-2 flex flex-col gap-7 items-center lg:items-start"
             style={{ "--from": "translateX(40px)" }}
