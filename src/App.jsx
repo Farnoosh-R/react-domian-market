@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 import Offers from './pages/offers'
 import Domains from './pages/domians';
 import Partnership from './pages/partnership';
+import Footer from './components/layout/Footer';
 
 export function useScrollAnimation() {
   
@@ -37,12 +38,15 @@ function App() {
 
   return (
     <>
+    <div className="relative min-h-screen flex flex-col">
     <Routes>
       <Route path='/' element={<Offers />} />
       <Route path='/domain/:domain' element={<Offers />} />
       <Route path='/domains' element={<Domains />}/>
       <Route path='/partnership' element={<Partnership />}/>
     </Routes>
+    <Footer />
+    </div>
     </>
   )
 }

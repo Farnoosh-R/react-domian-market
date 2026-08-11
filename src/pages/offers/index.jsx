@@ -63,7 +63,6 @@ const Offers = () => {
         );
 
         setDomainData(selected || defaultDomain);
-
       } catch (err) {
         console.log(err);
       } finally {
@@ -152,13 +151,16 @@ const Offers = () => {
   };
 
   return (
-    <div id="offers" className="relative min-h-screen flex items-center py-10">
+    <div
+      id="offers"
+      className="relative min-h-screen flex flex-col justify-center items-center pt-10 lg:pt-40 pb-10"
+    >
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-1 w-full h-full"
         alt=""
       />
-      <div className="app-container w-full z-10">
+      <div className="app-container w-full z-10 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div
             className="col-span-2 flex flex-col gap-7 items-center lg:items-start"
@@ -224,57 +226,6 @@ const Offers = () => {
                 className="bg-[var(--color-accent)] w-fit py-2 px-3 rounded-xl text-lg hover:opacity-90 transition-all mx-auto lg:mx-0"
               >
                 آگهی فروش دامنه
-              </Link>
-            </div>
-            <div className="flex gap-3">
-              <Link to={"#"}>
-                <FaTelegramPlane
-                  size={18}
-                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                />
-              </Link>
-              <a
-                href="https://www.linkedin.com/in/amiraliqorbani"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLinkedinIn
-                  size={18}
-                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                />
-              </a>
-              <Link to={"#"}>
-                <FaInstagram
-                  size={18}
-                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                />
-              </Link>
-              <a
-                href="https://wa.me/989128939845"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaWhatsapp
-                  size={18}
-                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                />
-              </a>
-              <a
-                href="https://ble.ir/amiralighorbani2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={bale}
-                  className="w-4 transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                  alt="bale"
-                />
-              </a>
-              <Link to={"#"}>
-                <FaYoutube
-                  size={18}
-                  className="text-white transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[var(--brand)] hover:text-white hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]"
-                />
               </Link>
             </div>
           </div>
