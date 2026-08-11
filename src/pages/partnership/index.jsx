@@ -107,14 +107,14 @@ const Partnership = () => {
   };
 
   return (
-    <div id="partnership" className="relative min-h-screen py-8">
+    <div id="partnership" className="relative min-h-screen py-6">
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-10 w-full h-full"
         alt=""
       />
       <div className="app-container">
-        <div className="flex flex-col gap-3 lg:gap-5 justify-center items-center">
+        <div className="flex flex-col gap-3 lg:gap-4 justify-center items-center">
           <div className="">
             <div className="flex gap-2 items-center">
               <FaHandshake size={35} color="var(--color-accent)" />
@@ -125,7 +125,7 @@ const Partnership = () => {
               هزاران خریدار قرار گیرد.
             </div>
           </div>
-          <div className="flex flex-col gap-2 lg:w-[80%] mt-10 lg:mt-0">
+          <div className="flex flex-col gap-2 lg:w-[80%] mt-10 lg:mt-0 mb-4">
             <div className="flex items-center justify-end w-full ">
               <Link
                 to={"/domains"}
@@ -139,7 +139,7 @@ const Partnership = () => {
               className=" bg-[var(--color-soft)] rounded-xl p-7 scroll-anim"
               style={{ "--from": "translateY(40px)" }}
             >
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                 <h2 className="text-[var(--color-smooth)]">
                   ثبت رایگان آگهی دامنه
                 </h2>

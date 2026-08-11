@@ -153,7 +153,7 @@ const Offers = () => {
   return (
     <div
       id="offers"
-      className="relative min-h-screen flex flex-col justify-center items-center pt-10 lg:pt-40 pb-10"
+      className="relative min-h-screen flex flex-col justify-center items-center pt-5 lg:pt-20 pb-10"
     >
       <img
         src={bg}
@@ -163,7 +163,7 @@ const Offers = () => {
       <div className="app-container w-full z-10 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div
-            className="col-span-2 flex flex-col gap-7 items-center lg:items-start"
+            className="col-span-2 flex flex-col gap-6 items-center lg:items-start"
             style={{ "--from": "translateX(40px)" }}
           >
             <div className="bg-[var(--color-danger)] w-fit text-white py-2 px-4  rounded-xl">
@@ -234,7 +234,7 @@ const Offers = () => {
             className="bg-[var(--color-soft)] rounded-xl p-7 mt-10 lg:mt-0 "
             style={{ "--from": "translateX(-40px)" }}
           >
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد خرید</h2>
               <div className="text-[var(--color-muted)] text-lg">
                 لطفاً فرم زیر را تکمیل کنید تا پیشنهاد شما برای فروشنده ارسال

@@ -73,7 +73,7 @@ const Domains = () => {
   }
 
   return (
-    <div id="domains" className="relative min-h-screen py-10">
+    <div id="domains" className="relative min-h-screen py-8">
       <img
         src={bg}
         className="absolute inset-0 object-cover -z-10 w-full h-full"
@@ -102,7 +102,7 @@ const Domains = () => {
             />
           </div>
 
-          <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)]">
+          <div className="bg-[var(--color-smooth)]/80 border border-[#05df72]/15 rounded-3xl p-4 shadow-[0_10px_30px_rgba(5,223,114,0.08)] mb-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-white text-xl font-bold">
                 لیست دامنه‌های موجود
