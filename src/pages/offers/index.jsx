@@ -49,6 +49,11 @@ const Offers = () => {
       "این دامنه برای فروش در دسترس است. برای دریافت اطلاعات بیشتر و ثبت پیشنهاد خرید با ما در ارتباط باشید.",
   };
 
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+
   useEffect(() => {
     const fetchDomain = async () => {
       try {
@@ -100,9 +105,94 @@ const Offers = () => {
     }));
   };
 
+  const handleSendOtp = async () => {
+    if (!form.phone) {
+      alert("لطفاً شماره موبایل خود را وارد کنید.");
+      return;
+    }
+
+    if (!/^09\d{9}$/.test(form.phone)) {
+      alert("شماره موبایل معتبر نیست.");
+      return;
+    }
+
+    setOtpLoading(true);
+
+    try {
+      const res = await fetch(
+        "https://domigo.ir/api/wp-json/custom/v1/send-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: form.phone,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setOtpSent(true);
+        alert("کد تایید برای شما ارسال شد.");
+      } else {
+        alert(data.message || "ارسال کد تایید ناموفق بود.");
+      }
+    } catch (err) {
+      console.log(err);
+      alert("خطایی در ارسال کد تایید رخ داد.");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp) {
+      alert("لطفاً کد تایید را وارد کنید.");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "https://domigo.ir/api/wp-json/custom/v1/verify-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: form.phone,
+            otp: otp,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (data.success && data.verified) {
+        setOtpVerified(true);
+        alert("شماره موبایل با موفقیت تایید شد.");
+      } else {
+        setOtpVerified(false);
+        alert("کد تایید اشتباه است.");
+      }
+    } catch (err) {
+      console.log(err);
+      setOtpVerified(false);
+      alert("خطایی در تایید کد رخ داد.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess(false);
+
+    if (!otpVerified) {
+      alert("لطفاً ابتدا شماره موبایل خود را تایید کنید.");
+      return;
+    }
 
     if (Number(captchaValue) !== captcha.answer) {
       alert("پاسخ سوال امنیتی اشتباه است.");
@@ -135,13 +225,23 @@ const Offers = () => {
 
       if (data.success) {
         setSuccess(true);
-        setForm({
-          name: "",
-          phone: "",
-          offer: "",
-        });
-        setCaptcha(generateCaptcha());
-        setCaptchaValue("");
+
+        setTimeout(() => {
+          setForm({
+            name: "",
+            phone: "",
+            offer: "",
+          });
+
+          setOtp("");
+          setOtpSent(false);
+          setOtpVerified(false);
+
+          setCaptcha(generateCaptcha());
+          setCaptchaValue("");
+
+          setSuccess(false);
+        }, 3000);
       }
     } catch (err) {
       console.log(err);
@@ -236,10 +336,12 @@ const Offers = () => {
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <h2 className="text-[var(--color-smooth)]">ثبت پیشنهاد خرید</h2>
+
               <div className="text-[var(--color-muted)] text-lg">
                 لطفاً فرم زیر را تکمیل کنید تا پیشنهاد شما برای فروشنده ارسال
                 شود.
               </div>
+
               {/* نام و نام خانوادگی */}
               <div className="md:col-span-1">
                 <input
@@ -252,18 +354,6 @@ const Offers = () => {
                 />
               </div>
 
-              {/* شماره تماس */}
-              <div className="md:col-span-1">
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="شماره تماس خود را وارد نمایید"
-                  className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
-                />
-              </div>
               {/* پیشنهاد */}
               <div className="md:col-span-1">
                 <div className="relative">
@@ -282,7 +372,67 @@ const Offers = () => {
                   </span>
                 </div>
               </div>
-              {/* capcha */}
+
+              {/* شماره موبایل + OTP */}
+              <div className="md:col-span-1 flex flex-col gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    type="tel"
+                    inputMode="numeric"
+                    placeholder="شماره موبایل را وارد کنید"
+                    disabled={otpVerified}
+                    className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400 disabled:bg-gray-100"
+                  />
+
+                  {!otpVerified && (
+                    <button
+                      type="button"
+                      onClick={handleSendOtp}
+                      disabled={otpLoading}
+                      className="bg-[var(--color-accent)] text-white px-5 py-3 rounded-xl whitespace-nowrap hover:opacity-90 transition-all disabled:opacity-50"
+                    >
+                      {otpLoading ? "در حال ارسال..." : "ارسال کد تایید"}
+                    </button>
+                  )}
+                </div>
+
+                {/* OTP */}
+                {otpSent && !otpVerified && (
+                  <div className="flex flex-col sm:flex-row gap-2 mt-1">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={4}
+                      value={otp}
+                      onChange={(e) =>
+                        setOtp(e.target.value.replace(/\D/g, ""))
+                      }
+                      placeholder="کد تایید را وارد کنید"
+                      className="w-full rounded-xl text-[var(--color-smooth)] border-2 border-gray-300 px-4 py-3 outline-none focus:border-[var(--color-accent)] placeholder:text-gray-400"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      className="bg-[var(--color-accent)] text-white px-5 py-3 rounded-xl whitespace-nowrap hover:opacity-90 transition-all"
+                    >
+                      تایید کد
+                    </button>
+                  </div>
+                )}
+
+                {/* تایید موفق */}
+                {otpVerified && (
+                  <div className="text-green-600 text-sm">
+                    شماره موبایل با موفقیت تایید شد ✔
+                  </div>
+                )}
+              </div>
+
+              {/* کپچا */}
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-[var(--color-smooth)] text-[var(--color-muted)]">
                   حاصل {captcha.first} + {captcha.second} چند می‌شود؟
@@ -301,12 +451,13 @@ const Offers = () => {
               <div className="md:col-span-2">
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="bg-[var(--color-accent)] w-full cursor-pointer hover:opacity-90 transition-all text-white px-8 py-2 rounded-xl"
+                  disabled={loading || !otpVerified}
+                  className="bg-[var(--color-accent)] w-full cursor-pointer hover:opacity-90 transition-all text-white px-8 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "در حال ارسال..." : "ارسال پیشنهاد"}
                 </button>
               </div>
+
               {success && (
                 <div className="text-green-600 mt-4">
                   درخواست شما با موفقیت ارسال شد ✔
